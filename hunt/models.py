@@ -17,11 +17,11 @@ class Question(models.Model):
         return self.question_text
 
 class Profile(models.Model):
-    team = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     captain = models.CharField(max_length=100)
-    team_member2 = models.CharField(max_length=100, null=True, blank=True)
-    team_member3 = models.CharField(max_length=100, null=True, blank=True)
-    team_member4 = models.CharField(max_length=100, null=True, blank=True)
+    team_member2 = models.CharField(max_length=100, null=True, blank=True, default="Chuck")
+    team_member3 = models.CharField(max_length=100, null=True, blank=True, default="Carly")
+    team_member4 = models.CharField(max_length=100, null=True, blank=True, default="Jackson")
     team_member5 = models.CharField(max_length=100, null=True, blank=True)
     last_question_answered = models.ForeignKey(Question, on_delete=models.CASCADE, null=True, blank=True)
     last_wrong_answered_made_on = models.DateTimeField('last wrong answer date', null=True, blank=True)
@@ -29,7 +29,11 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
-# @receiver(post_save, sender=User)
-# def create_user_profile(sender, instance, created, **kwargs):
-#     if created:
-#         Profile.objects.create(user=instance)
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()

@@ -1,0 +1,13 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    {% if team_list %}
+        <ul>
+        {% for team in team_list %}
+            <li><a href="{% url 'piratehunt:team_detail' team.id %}">{{ team.user.username }} - {{ team.last_question_answered.id}}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No teams have signed up.</p>
+    {% endif %}
+{% endblock %}
