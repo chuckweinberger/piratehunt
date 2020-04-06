@@ -15,32 +15,23 @@ class IndexView(generic.ListView):
     context_object_name = 'team_list'
 
     def get_queryset(self):
-        """Return the last five published questions."""
-        # return Question.objects.order_by('-pub_date')[:5]
 
         return Profile.objects.order_by('last_question_answered')
 
 
 class TeamView(generic.ListView):
     model = User
-    #
-    # def get_queryset(self):
-    #     """Return the last five published questions."""
-    #     return Question.objects.order_by('-pub_date')[:5]
+    # context_object_name = "team"
 
 class TeamDetailView(generic.DetailView):
     model = User
+    template_name = 'piratehunt/team_details.html'
 
 class QuestionView(generic.ListView):
     model = Question
-    #
-    # def get_queryset(self):
-    #     """Return the last five published questions."""
-    #     return Question.objects.order_by('-pub_date')[:5]
 
 class QuestionDetailView(generic.DetailView):
     model = Question
-
 
 def signup(request):
     if request.user.is_authenticated:

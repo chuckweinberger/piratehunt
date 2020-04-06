@@ -23,7 +23,7 @@ class Profile(models.Model):
     team_member3 = models.CharField(max_length=100, null=True, blank=True, default="Carly")
     team_member4 = models.CharField(max_length=100, null=True, blank=True, default="Jackson")
     team_member5 = models.CharField(max_length=100, null=True, blank=True)
-    last_question_answered = models.ForeignKey(Question, on_delete=models.CASCADE, null=True, blank=True)
+    last_question_answered = models.ForeignKey(Question, on_delete=models.CASCADE, blank=True, null=True)
     last_wrong_answered_made_on = models.DateTimeField('last wrong answer date', null=True, blank=True)
 
     def __str__(self):

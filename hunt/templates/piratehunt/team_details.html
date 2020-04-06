@@ -1,1 +1,38 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+  {% if user %}
+  
+    <p><strong>Team Name: </strong> {{ user.username }}</p>
+    
+    {% if user.profile %}
+    
+      {% if user.profile.captain %}<p><strong>Captain: </strong>{{ user.profile.captain }}</p>{% endif %}
+    
+      <ul>
+          {% if user.profile.team_member1 %}<li>{{ user.profile.team_member2 }}{% endif %}</li>
+          {% if user.profile.team_member2 %}<li>{{ user.profile.team_member3 }}{% endif %}</li>
+          {% if user.profile.team_member3 %}<li>{{ user.profile.team_member4 }}{% endif %}</li>
+          {% if user.profile.team_member4 %}<li>{{ user.profile.team_member5 }}{% endif %}</li>
+      </ul>
+      
+    {% endif %}
+    
+    <p><strong>Last Question Answered:</strong> 
+    
+      {% if user.profile.last_question_answered %}
+      
+        <p>Last Question Answered {{user.profile.last_question_answered}}</p>
+        
+      {% else %}
+        
+        This team has not answered any questions yet</p>
+      
+      {% endif %}
+      
+      
+    {% endif %}
+    
+{% endblock %}
 

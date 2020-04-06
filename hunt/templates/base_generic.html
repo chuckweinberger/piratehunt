@@ -18,14 +18,13 @@
         <div class="navbar-header">
           <a class="navbar-brand" href="#">Pirate Hunt 2020
             {% if user.is_authenticated %}
-              - Player: {{ user.get_username }}
+              - Team: {{ user.get_username }}
             {% endif %}
           </a>
         </div>
         <ul class="nav navbar-nav">
-          <li class="active"><a href="#">Home</a></li>
+          <li class="active"><a href="{% url 'piratehunt:index' %}">Home</a></li>
           <li><a href="#">Problems</a></li>
-          <li><a href="#">Teams</a></li>
           {% if user.is_authenticated %}
             <li><a href="{% url 'logout' %}">Logout</a></li>
           {% else %}
