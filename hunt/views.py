@@ -37,21 +37,24 @@ def signup(request):
     if request.user.is_authenticated:
         return redirect('/piratehunt')
     if request.method == 'POST':
-        form = SignUpForm(request.POST)
-        if form.is_valid():
-            user = form.save()
+        uform = SignUpForm(request.POST)
+        # pform = UserProfileForm(data = request.POST)
+        if uform.is_valid():
+            user = uform.save()
             user.refresh_from_db()
-            user.profile.team_member5 = "Mystery Player"
-            # user.profile.last_name = form.cleaned_data.get('last_name')
-            # user.profile.email = form.cleaned_data.get('email')
+            user.profile.captain = uform.cleaned_data.get('captain')
+            user.profile.team_member2 = uform.cleaned_data.get('team_member2')
+            user.profile.team_member3 = uform.cleaned_data.get('team_member3')
+            user.profile.team_member4 = uform.cleaned_data.get('team_member4')
+            user.profile.team_member5 = uform.cleaned_data.get('team_member5')
             user.save()
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password1')
+            username = uform.cleaned_data.get('username')
+            password = uform.cleaned_data.get('password1')
             user = authenticate(username=username, password=password)
             login(request, user)
             return redirect('/piratehunt')
         else:
-            return render(request, 'registration/signup.html', {'form': form})
+            return render(request, 'registration/signup.html', {'uform': uform})
     else:
-        form = SignUpForm()
-        return render(request, 'registration/signup.html', {'form': form})
+        uform = SignUpForm()
+        return render(request, 'registration/signup.html', {'uform': uform})

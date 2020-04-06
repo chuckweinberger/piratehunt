@@ -8,13 +8,16 @@
     
     {% if user.profile %}
     
-      {% if user.profile.captain %}<p><strong>Captain: </strong>{{ user.profile.captain }}</p>{% endif %}
+      {% if user.profile.captain %}
+        <p><strong>Captain: </strong>{{ user.profile.captain }}</p>
+      {% endif %}
     
+      <p><strong>Team Members:</strong></p>
       <ul>
-          {% if user.profile.team_member1 %}<li>{{ user.profile.team_member2 }}{% endif %}</li>
-          {% if user.profile.team_member2 %}<li>{{ user.profile.team_member3 }}{% endif %}</li>
-          {% if user.profile.team_member3 %}<li>{{ user.profile.team_member4 }}{% endif %}</li>
-          {% if user.profile.team_member4 %}<li>{{ user.profile.team_member5 }}{% endif %}</li>
+          {% if user.profile.team_member2 %}<li>{{ user.profile.team_member2 }}{% endif %}</li>
+          {% if user.profile.team_member3 %}<li>{{ user.profile.team_member3 }}{% endif %}</li>
+          {% if user.profile.team_member4 %}<li>{{ user.profile.team_member4 }}{% endif %}</li>
+          {% if user.profile.team_member5 %}<li>{{ user.profile.team_member5 }}{% endif %}</li>
       </ul>
       
     {% endif %}

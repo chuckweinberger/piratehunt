@@ -4,7 +4,7 @@
     <h2>Sign up Form</h2>
     <form method="post">
       {% csrf_token %}
-      {% for field in form %}
+      {% for field in uform %}
         <p>
           {{ field.label_tag }}<br>
           {{ field }}
@@ -16,6 +16,6 @@
           {% endfor %}
         </p>
       {% endfor %}
-      <button type="submit">Sign up</button>
-    </form>
+      <button type="submit" class="btn btn-primary mt-1 btn-lg ">Register</button>
+    </form>      
 {% endblock %}
