@@ -4,7 +4,6 @@ from . import views
 app_name = 'piratehunt'
 
 urlpatterns = [
-
 #   ex: /piratehunt
     path('', views.IndexView.as_view(), name='index'),
 #   ex: /piratehunt/teams
@@ -15,5 +14,6 @@ urlpatterns = [
     path('<int:pk>/', views.QuestionDetailView.as_view(), name='question_detail'),
     #   ex: '/piratehunt/signup
     path('signup/', views.signup, name='signup'),
-    path('questions/<int:pk>/', views.QuestionDetailView.as_view(), name='questions')
+    path('questions/<int:pk>/', views.QuestionDetailView.as_view(), name='questions'),
+    
 ]
