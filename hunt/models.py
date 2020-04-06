@@ -12,6 +12,7 @@ class Question(models.Model):
     answer2 = models.CharField(max_length=200, null=True)
     answer3 = models.CharField(max_length=200, null=True)
     times_solved = models.IntegerField(default=0)
+    number = models.IntegerField(default=1)
 
     def __str__(self):
         return self.question_text

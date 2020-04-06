@@ -22,15 +22,15 @@
       
     {% endif %}
     
-    <p><strong>Last Question Answered:</strong> 
+    <p><strong>Last Problem Solved:</strong> 
     
       {% if user.profile.last_question_answered %}
       
-        <p>Last Question Answered {{user.profile.last_question_answered}}</p>
+        <p>Last Problem Solved {{user.profile.last_question_answered}}</p>
         
       {% else %}
         
-        This team has not answered any questions yet</p>
+        This team has not answered solved any problems yet</p>
       
       {% endif %}
       
