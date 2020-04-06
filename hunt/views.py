@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views import generic
@@ -16,17 +16,16 @@ class IndexView(generic.ListView):
 
     def get_queryset(self):
 
-        return Profile.objects.order_by('last_question_answered')
+       return Profile.objects.all().order_by('-questions_answered__number')
 
-
-class TeamView(generic.ListView):
-    model = User
-    # context_object_name = "team"
 
 class TeamDetailView(generic.DetailView):
     model = User
     template_name = 'piratehunt/team_details.html'
 
+def team_auth(request, user_id):
+    return HttpResponse("You're looking for team: %s" %user_id)
+    
 class QuestionView(generic.ListView):
     model = Question
 

@@ -4,7 +4,7 @@
     {% if team_list %}
         <ul>
         {% for team in team_list %}
-            <li><a href="{% url 'piratehunt:team_detail' team.user.id %}">{{ team.user.username }} - {{ team.last_question_answered.id}}</a></li>
+            <li><a href="{% url 'piratehunt:team_detail' team.user.id %}">{{ team.user.username }} - {{ team.questions_answered.last.number }}</a></li>
         {% endfor %}
         </ul>
     {% else %}
