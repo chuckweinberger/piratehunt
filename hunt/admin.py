@@ -22,7 +22,10 @@ class UserAdmin(BaseUserAdmin):
     get_captain.short_description = "Team Captain"
 
     def get_last_question_answered(self, instance):
-        return instance.profile.questions_answered.last().number
+        try:
+            return instance.profile.questions_answered.last().number
+        except AttributeError:
+            return 0
     get_last_question_answered.short_description = "Last Question Answered"
 
 admin.site.unregister(User)

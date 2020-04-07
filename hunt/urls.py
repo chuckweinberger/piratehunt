@@ -11,7 +11,7 @@ urlpatterns = [
 #   ex: /piratehunt/3/auth
     path('teams/<int:user_id>/auth', views.team_auth, name='team_auth'),
 #   ex: /piratehunt/question/3
-    path('question/<int:pk>/', views.QuestionDetailView.as_view(), name='question'),
+    path('question/<int:question_number>/', views.QuestionDetail, name='question'),
 #   ex/piratehunt/signup
     path('signup/', views.signup, name='signup'),
     

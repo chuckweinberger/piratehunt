@@ -2,11 +2,15 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views import generic
+from django.utils.timezone import now
+from datetime import timedelta
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 from .models import Question, Profile
-from .forms import SignUpForm
+from .forms import SignUpForm, AnswerForm
 
 # Create your views here.
 
@@ -26,8 +30,64 @@ class TeamDetailView(generic.DetailView):
 def team_auth(request, user_id):
     return HttpResponse("You're looking for team: %s" %user_id)
     
-class QuestionView(generic.ListView):
-    model = Question
+@login_required
+def QuestionDetail(request, question_number):
+    user = request.user
+    last_question = user.profile.questions_answered.last()
+    
+    #Capture the case of the team that hasn't yet answered a question
+    if hasattr(last_question, 'number'): #the team has already answered a question
+        
+        #capture when the user's next question does not exist
+        try:
+            current_question = Question.objects.get(number=(last_question.number + 1))
+        except:
+            messages.info(request, 'It looks like you have answered all of the questions.  Good job!')
+            return HttpResponseRedirect(reverse('piratehunt:index'))
+        
+    else:
+        
+        current_question = Question.objects.get(number = 1)
+        user.profile.last_wrong_answered_made_on = now() - timedelta(hours=3)
+        
+    #Make sure this team is accessing the correct question
+    if current_question.number == question_number:
+
+        #Make sure that this team isn't trying to answer the question too fast
+        if user.profile.last_wrong_answered_made_on < now() - timedelta(minutes=1):
+            form = AnswerForm(request.POST)
+            if form.is_valid():
+                attempt = form.cleaned_data.get('answer')
+                if  attempt == current_question.answer1 or (attempt == current_question.answer2) or (attempt == current_question.answer3):
+                    user.profile.questions_answered.add(current_question)
+                    #make sure to reset the clock so that the team can answer the next question quickly
+                    current_question.times_solved = current_question.times_solved + 1
+
+                    messages.info(request, 'Great News!  You are correct!')
+                    return HttpResponseRedirect(reverse('piratehunt:index'))
+                
+                else:
+                    user.profile.last_wrong_answered_made_on = now()
+                    user.save()
+                    
+                    messages.info(request, 'All guesses are wrong!  Try again in 2 hours.')
+                    return HttpResponseRedirect(reverse('piratehunt:index'))
+                    
+            else: #this is the GET for this view
+            
+                return render(request, 'piratehunt/question_answer.html', {'form': form, 'question': current_question.question_text})
+                
+        else:  #Not enough time has passed since the last wrong answer
+            
+            messages.info(request, 'You must wait a full two hours to try to answer this question again')
+            return HttpResponseRedirect(reverse('piratehunt:index'))
+            
+    else: #user is trying to access the wrong question number
+        
+        url = reverse('piratehunt:question', kwargs={'question_number': current_question.number})
+        messages.info(request, 'You are not at that question')
+        return HttpResponseRedirect(url)
+    
 
 class QuestionDetailView(generic.DetailView):
     model = Question
@@ -37,7 +97,6 @@ def signup(request):
         return redirect('/piratehunt')
     if request.method == 'POST':
         uform = SignUpForm(request.POST)
-        # pform = UserProfileForm(data = request.POST)
         if uform.is_valid():
             user = uform.save()
             user.refresh_from_db()
@@ -46,6 +105,8 @@ def signup(request):
             user.profile.team_member3 = uform.cleaned_data.get('team_member3')
             user.profile.team_member4 = uform.cleaned_data.get('team_member4')
             user.profile.team_member5 = uform.cleaned_data.get('team_member5')
+            #make sure that the user can start answering questions right away
+            user.profile.last_wrong_answered_made_on = now() - timedelta(hours = 2)
             user.save()
             username = uform.cleaned_data.get('username')
             password = uform.cleaned_data.get('password1')

@@ -50,16 +50,21 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-PASSWORD_HASHERS = (
-        'django.contrib.auth.hashers.PBKDF2PasswordHasher',
-        'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
-        'django.contrib.auth.hashers.BCryptPasswordHasher',
-        'django.contrib.auth.hashers.SHA1PasswordHasher',
-        'django.contrib.auth.hashers.MD5PasswordHasher',
-        'django.contrib.auth.hashers.CryptPasswordHasher',
-)
+# PASSWORD_HASHERS = (
+#         'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+#         'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+#         'django.contrib.auth.hashers.BCryptPasswordHasher',
+#         'django.contrib.auth.hashers.SHA1PasswordHasher',
+#         'django.contrib.auth.hashers.MD5PasswordHasher',
+#         'django.contrib.auth.hashers.CryptPasswordHasher',
+# )
 
 ROOT_URLCONF = 'piratehunt.urls'
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/3.0/howto/static-files/
+
+STATIC_URL = '/static/'
 
 # Redirect to home URL after login (Default redirects to /accounts/profile/)
 LOGIN_REDIRECT_URL = '/piratehunt'
@@ -127,7 +132,4 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_URL = '/static/'

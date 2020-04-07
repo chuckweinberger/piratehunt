@@ -1,6 +1,15 @@
 {% extends "base_generic.html" %}
 
+ 
 {% block content %}
+
+    <script type="text/javascript">
+     $(function(){
+       {% if alert %}
+          alert('{{alert}}');
+       {% endif %}
+     });
+    </script>
     {% if team_list %}
         <ul>
         {% for team in team_list %}
