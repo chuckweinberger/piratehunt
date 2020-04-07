@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.db.models import Max
 
 from .models import Question, Profile
 from .forms import SignUpForm, AnswerForm
@@ -20,9 +21,31 @@ class IndexView(generic.ListView):
 
     def get_queryset(self):
 
-       return Profile.objects.all().order_by('-questions_answered__number')
+        # return Profile.objects.order_by('-questions_answered__number').distinct()
+       return Profile.objects.annotate(max_number=Max('questions_answered__number')).order_by('-max_number')
 
-
+@login_required
+def QuestionView(request):
+    profile = request.user.profile
+    last_question = profile.questions_answered.last()
+    
+    #Capture fringe cases
+    if hasattr(last_question, 'number'): #the team has already answered a question
+        
+        #capture when the user's next question does not exist
+        try:
+            current_question = Question.objects.get(number=(last_question.number + 1))
+        except:
+            messages.info(request, 'It looks like you have answered all of the questions.  Good job!')
+            return HttpResponseRedirect(reverse('piratehunt:index'))
+    
+    else: #this team has yet to answer the first question
+        current_question = Question.objects.first()
+        
+    url = reverse('piratehunt:question', kwargs={'question_number': current_question.number})
+    messages.info(request, 'Good luck solving the problem!')
+    return HttpResponseRedirect(url)
+    
 class TeamDetailView(generic.DetailView):
     model = User
     template_name = 'piratehunt/team_details.html'
@@ -32,7 +55,9 @@ def team_auth(request, user_id):
     
 @login_required
 def QuestionDetail(request, question_number):
-    user = request.user
+    
+    #create the user instance
+    user = User.objects.get(pk=request.user.id)
     last_question = user.profile.questions_answered.last()
     
     #Capture the case of the team that hasn't yet answered a question
@@ -48,26 +73,28 @@ def QuestionDetail(request, question_number):
     else:
         
         current_question = Question.objects.get(number = 1)
-        user.profile.last_wrong_answered_made_on = now() - timedelta(hours=3)
+        user.profile.last_wrong_answer_made_on = now() - timedelta(hours=3)
         
     #Make sure this team is accessing the correct question
     if current_question.number == question_number:
 
         #Make sure that this team isn't trying to answer the question too fast
-        if user.profile.last_wrong_answered_made_on < now() - timedelta(minutes=1):
+        if user.profile.last_wrong_answer_made_on < now() - timedelta(minutes=1):
             form = AnswerForm(request.POST)
             if form.is_valid():
                 attempt = form.cleaned_data.get('answer')
                 if  attempt == current_question.answer1 or (attempt == current_question.answer2) or (attempt == current_question.answer3):
                     user.profile.questions_answered.add(current_question)
+                    user.save()
                     #make sure to reset the clock so that the team can answer the next question quickly
                     current_question.times_solved = current_question.times_solved + 1
+                    current_question.save()
 
-                    messages.info(request, 'Great News!  You are correct!')
+                    messages.info(request, 'Great News!  You are correct! You can now go on to the next problem')
                     return HttpResponseRedirect(reverse('piratehunt:index'))
                 
                 else:
-                    user.profile.last_wrong_answered_made_on = now()
+                    user.profile.last_wrong_answer_made_on = now()
                     user.save()
                     
                     messages.info(request, 'All guesses are wrong!  Try again in 2 hours.')
@@ -106,7 +133,7 @@ def signup(request):
             user.profile.team_member4 = uform.cleaned_data.get('team_member4')
             user.profile.team_member5 = uform.cleaned_data.get('team_member5')
             #make sure that the user can start answering questions right away
-            user.profile.last_wrong_answered_made_on = now() - timedelta(hours = 2)
+            user.profile.last_wrong_answer_made_on = now() - timedelta(hours = 2)
             user.save()
             username = uform.cleaned_data.get('username')
             password = uform.cleaned_data.get('password1')
