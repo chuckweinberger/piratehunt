@@ -92,9 +92,17 @@ WSGI_APPLICATION = 'piratehunt.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    # }
+    'default' : {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'erccazzh',
+        'USER': 'erccazzh',
+        'PASSWORD': 'yVbV21xIyWYIODqj8FLvCkFl0efRmUtX',
+        'HOST': 'otto.db.elephantsql.com',
+        'PORT': '5432',
     }
 }
 

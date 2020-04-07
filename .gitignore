@@ -10,3 +10,4 @@ local_settings.py
 hunt/migrations/*
 .DS_store
 manage.py
+datadump.json
