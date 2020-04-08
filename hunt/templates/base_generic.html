@@ -31,11 +31,11 @@
          {% endif %}
        </ul>
       <div class="btn-toolbar pull-right">
-        {% if user.is_authenticated %}
+        {% if request.user.is_authenticated %}
           <ul class="navbar-nav mr-auto">
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle navbar-brand" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Team: {{ user.get_username }}
+                Team: {{ request.user.get_username }}
               </a>
               <div class="dropdown-menu nav-link navbar-brand" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>

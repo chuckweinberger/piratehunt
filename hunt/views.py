@@ -78,7 +78,7 @@ def QuestionDetail(request, question_number):
     if current_question.number == question_number:
 
         #Make sure that this team isn't trying to answer the question too fast
-        if user.profile.last_wrong_answer_made_on < now() - timedelta(minutes=10):
+        if user.profile.last_wrong_answer_made_on < now() - timedelta(seconds=10):
             form = AnswerForm(request.POST)
             if form.is_valid():
                 attempt = form.cleaned_data.get('answer')
@@ -126,6 +126,7 @@ def signup(request):
         if uform.is_valid():
             user = uform.save()
             user.refresh_from_db()
+            user.email = uform.cleaned_data.get('email')
             user.profile.captain = uform.cleaned_data.get('captain')
             user.profile.team_member2 = uform.cleaned_data.get('team_member2')
             user.profile.team_member3 = uform.cleaned_data.get('team_member3')
@@ -134,6 +135,7 @@ def signup(request):
             #make sure that the user can start answering questions right away
             user.profile.last_wrong_answer_made_on = now() - timedelta(hours = 2)
             user.save()
+            print(user.email)
             username = uform.cleaned_data.get('username')
             password = uform.cleaned_data.get('password1')
             user = authenticate(username=username, password=password)
