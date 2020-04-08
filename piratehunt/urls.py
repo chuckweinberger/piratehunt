@@ -8,5 +8,5 @@ urlpatterns = [
     path('piratehunt/', include('hunt.urls')),
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('', RedirectView.as_view(url='hunt', permanent=True)),
+    path('', RedirectView.as_view(url='piratehunt', permanent=True)),
 ]
