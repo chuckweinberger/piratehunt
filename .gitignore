@@ -7,6 +7,5 @@ piratehunt/*.env
 *.pot
 __pycache__/
 local_settings.py
-hunt/migrations/*
 .DS_store
 datadump.json
