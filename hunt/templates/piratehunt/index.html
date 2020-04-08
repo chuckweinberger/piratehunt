@@ -9,6 +9,7 @@
           <tr>
             <th scope="col">Team Name</th>
             <th scope="col">Last Question Answered</th>
+            <th scope="col">Team Captain</th>
           </tr>
         </thead>
         <tbody>
@@ -17,10 +18,14 @@
               <tr>
                 <td><a href="{% url 'piratehunt:team_detail' team.user.id %}">{{ team.user.username }}</a></td>
                 <td>{{ team.questions_answered.last.number }}</td>
+                <td>{{ team.captain }}</td>
               </tr>
             {% endif %}
           {% endfor %}
         </tbody>
+      {% if request.user.is_superuser %}
+        <strong>Note, superusers are not listed below as part of the game</strong>
+      {% endif %}
     {% else %}
         <p>No teams have signed up.</p>
     {% endif %}
