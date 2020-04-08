@@ -43,7 +43,6 @@ def QuestionView(request):
         current_question = Question.objects.first()
         
     url = reverse('piratehunt:question', kwargs={'question_number': current_question.number})
-    messages.info(request, 'Good luck solving the problem!')
     return HttpResponseRedirect(url)
     
 class TeamDetailView(generic.DetailView):

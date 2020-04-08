@@ -8,7 +8,7 @@ from .models import Profile
 class SignUpForm(UserCreationForm):
     username = UsernameField(
                                 label='Team Name',
-                                widget=forms.TextInput(attrs={'autofocus': True})
+                                widget=forms.TextInput(attrs={'autofocus': True, 'class':'form-control'})
                             )
     captain = forms.CharField(max_length=100, label='Team Captain', help_text='Please use your real name')
     team_member2 = forms.CharField(max_length=100, label='Team Member 1', required=False, help_text='You can have up to 4 Team Members')
@@ -18,4 +18,4 @@ class SignUpForm(UserCreationForm):
     email = forms.EmailField(max_length=150, help_text='Team Captain\'s Email')
 
 class AnswerForm(forms.Form):
-    answer = forms.CharField(label="What\'s your guess?", max_length=400)
+    answer = forms.CharField(label="What\'s your guess?", max_length=400, widget=forms.TextInput(attrs={'class':'form-control'}))

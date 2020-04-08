@@ -6,16 +6,17 @@
   <form method="post">
     {% csrf_token %}
     {% for field in form %}
-      <p>
-        {{ field.label_tag }}<br>
-        {{ field }}
-        {% if field.help_text %}
-          <small style="color: grey">{{ field.help_text }}</small>
-        {% endif %}
-
-      </p>
+      <div class="form-group">
+        <p>
+          {{ field.label_tag }}<br>
+          {{ field }}
+          {% if field.help_text %}
+            <small class='form-text text-muted'>{{ field.help_text }}</small>
+          {% endif %}
+        </p>
+      </div>
     {% endfor %}
-    <button type="submit" class="btn btn-primary mt-1 btn-lg ">Submit your guess</button>
+    <button type="submit" class="btn btn-primary">Submit your guess</button>
   </form>    
   
   {% endblock %}

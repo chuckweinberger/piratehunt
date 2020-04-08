@@ -35,7 +35,7 @@
           <ul class="navbar-nav mr-auto">
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle navbar-brand" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                {{ user.get_username }}
+                Team: {{ user.get_username }}
               </a>
               <div class="dropdown-menu nav-link navbar-brand" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
