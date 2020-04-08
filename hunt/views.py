@@ -79,7 +79,7 @@ def QuestionDetail(request, question_number):
     if current_question.number == question_number:
 
         #Make sure that this team isn't trying to answer the question too fast
-        if user.profile.last_wrong_answer_made_on < now() - timedelta(minutes=1):
+        if user.profile.last_wrong_answer_made_on < now() - timedelta(minutes=5):
             form = AnswerForm(request.POST)
             if form.is_valid():
                 attempt = form.cleaned_data.get('answer')

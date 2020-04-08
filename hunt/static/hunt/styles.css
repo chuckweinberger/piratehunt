@@ -1,3 +1,11 @@
 .info {
   color: indianred;
 }
+
+table {
+    counter-reset: rowNumber;
+}
+
+table tr {
+    counter-increment: rowNumber;
+}
