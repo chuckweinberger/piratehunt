@@ -3,6 +3,15 @@
  
 {% block content %}
 
+  {% if not request.user.is_authenticated  %}
+    <div>
+      <p>To play Pirate Hunt - Corona Virus Edition - simply sign up as an individual or as the captain of a team, and then start solving problems.</p>
+      <p>Each time you solve one problem you can move on to the next one.</p>
+      <p>But each time you give an incorrect answer you must wait 15 minutes before you can try again.</p>
+      <p>Good luck, and have fun!</p> 
+    </div>
+  {% endif %}
+
   <h1>Current Leader Board</h1>
   
   {% if team_list %}
