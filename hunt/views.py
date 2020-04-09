@@ -135,7 +135,6 @@ def signup(request):
             #make sure that the user can start answering questions right away
             user.profile.last_wrong_answer_made_on = now() - timedelta(hours = 2)
             user.save()
-            print(user.email)
             username = uform.cleaned_data.get('username')
             password = uform.cleaned_data.get('password1')
             user = authenticate(username=username, password=password)
