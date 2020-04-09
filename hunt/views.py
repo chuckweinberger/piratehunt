@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Max
 
-from .models import Question, Profile
+from .models import Question, Profile, Answer
 from .forms import SignUpForm, AnswerForm
 
 # Create your views here.
@@ -81,13 +81,33 @@ def QuestionDetail(request, question_number):
         if user.profile.last_wrong_answer_made_on < now() - timedelta(seconds=10):
             form = AnswerForm(request.POST)
             if form.is_valid():
+                
+                #create new Answer instance
                 attempt = form.cleaned_data.get('answer')
-                if  attempt == current_question.answer1 or (attempt == current_question.answer2) or (attempt == current_question.answer3):
+                # answer = Answer(    text = attempt,
+                #                     user = user,
+                #                     made_on = now(),
+                #                     question = current_question
+                #                 )
+                # answer.save()
+                #
+                answer = current_question.answer_set.create(
+                    text = attempt,
+                    user = user,
+                    made_on = now()
+                )
+                #test the answer to see if it is correct
+                if  answer.text == current_question.answer1 or (attempt == current_question.answer2) or (attempt == current_question.answer3):
                     user.profile.questions_answered.add(current_question)
                     user.save()
-                    #make sure to reset the clock so that the team can answer the next question quickly
+                    
+                    #update the question instance
                     current_question.times_solved = current_question.times_solved + 1
                     current_question.save()
+                    
+                    #update the answer instance to show that the answer is correct
+                    answer.right = True
+                    answer.save()
 
                     messages.info(request, 'Great News!  You are correct! You can now go on to the next problem')
                     return HttpResponseRedirect(reverse('piratehunt:index'))
@@ -98,6 +118,7 @@ def QuestionDetail(request, question_number):
                     
                     messages.info(request, 'All guesses are wrong!  Try again in 10 minutes.')
                     return HttpResponseRedirect(reverse('piratehunt:index'))
+                    
                     
             else: #this is the GET for this view
             

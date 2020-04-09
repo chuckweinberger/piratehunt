@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User, Group
 
-from .models import Question, Profile
+from .models import Question, Profile, Answer
 
 class ProfileInline(admin.StackedInline):
     model = Profile
@@ -30,4 +30,5 @@ class UserAdmin(BaseUserAdmin):
 
 admin.site.unregister(User)
 admin.site.register(Question)
+admin.site.register(Answer)
 admin.site.register(User, UserAdmin)
