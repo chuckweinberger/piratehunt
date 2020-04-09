@@ -27,8 +27,11 @@ class UserAdmin(BaseUserAdmin):
         except AttributeError:
             return 0
     get_last_question_answered.short_description = "Last Question Answered"
+    
+class QuestionAdmin(admin.ModelAdmin):
+    pass
 
 admin.site.unregister(User)
-admin.site.register(Question)
+admin.site.register(Question, QuestionAdmin)
 admin.site.register(Answer)
 admin.site.register(User, UserAdmin)

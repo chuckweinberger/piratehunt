@@ -84,18 +84,13 @@ def QuestionDetail(request, question_number):
                 
                 #create new Answer instance
                 attempt = form.cleaned_data.get('answer')
-                # answer = Answer(    text = attempt,
-                #                     user = user,
-                #                     made_on = now(),
-                #                     question = current_question
-                #                 )
-                # answer.save()
-                #
+
                 answer = current_question.answer_set.create(
                     text = attempt,
                     user = user,
                     made_on = now()
                 )
+                
                 #test the answer to see if it is correct
                 if  answer.text == current_question.answer1 or (attempt == current_question.answer2) or (attempt == current_question.answer3):
                     user.profile.questions_answered.add(current_question)
