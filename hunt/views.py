@@ -78,7 +78,7 @@ def QuestionDetail(request, question_number):
     if current_question.number == question_number:
 
         #Make sure that this team isn't trying to answer the question too fast
-        if user.profile.last_wrong_answer_made_on < now() - timedelta(seconds=10):
+        if user.profile.last_wrong_answer_made_on < now() - timedelta(minutes=1):
             form = AnswerForm(request.POST)
             if form.is_valid():
                 
@@ -111,7 +111,7 @@ def QuestionDetail(request, question_number):
                     user.profile.last_wrong_answer_made_on = now()
                     user.save()
                     
-                    messages.info(request, 'All guesses are wrong!  Try again in 10 minutes.')
+                    messages.info(request, 'All guesses are wrong!  Try again in one minute.')
                     return HttpResponseRedirect(reverse('piratehunt:index'))
                     
                     
@@ -121,7 +121,7 @@ def QuestionDetail(request, question_number):
                 
         else:  #Not enough time has passed since the last wrong answer
             
-            messages.info(request, 'You must wait ten minutes before you can try to answer this question again')
+            messages.info(request, 'You must wait one minute before you can try to answer this question again')
             return HttpResponseRedirect(reverse('piratehunt:index'))
             
     else: #user is trying to access the wrong question number
