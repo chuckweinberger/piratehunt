@@ -78,7 +78,7 @@ def QuestionDetail(request, question_number):
     if current_question.number == question_number:
 
         #Make sure that this team isn't trying to answer the question too fast
-        if user.profile.last_wrong_answer_made_on < now() - timedelta(seconds=10):
+        if user.profile.last_wrong_answer_made_on < now() - timedelta(minutes=10):
             form = AnswerForm(request.POST)
             if form.is_valid():
                 

@@ -19,6 +19,24 @@ class Question(models.Model):
 
     def __str__(self):
         return self.question_text
+    
+    def first_to_solve(self):
+        try:
+            return self.answer_set.filter(right="True").first().user.username
+        except:
+            return
+    
+    def times_missed(self):
+        try:
+            return self.answer_set.filter(right="False").count()
+        except:
+            return
+        
+    def latest_to_miss(self):
+        try:
+            return self.answer_set.filter(right="False").last().user.username
+        except:
+            return
 
 class Answer(models.Model):
     text = models.CharField(max_length=400)
@@ -29,6 +47,14 @@ class Answer(models.Model):
 
     def __str__(self):
         return self.text
+        
+    def question_number(self):
+      try:
+          return self.question.number
+      except:
+          return
+        
+    
         
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

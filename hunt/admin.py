@@ -29,9 +29,15 @@ class UserAdmin(BaseUserAdmin):
     get_last_question_answered.short_description = "Last Question Answered"
     
 class QuestionAdmin(admin.ModelAdmin):
-    pass
+    empty_value_display = '-empty-'
+    list_display = ('number', 'question_text', 'first_to_solve', 'latest_to_miss', 'times_solved', 'times_missed')
+
+class AnswerAdmin(admin.ModelAdmin):
+    empty_value_display = '-empty-'
+    list_display = ('question_number', 'question', 'text', 'right', 'user', 'made_on' )
+    ordering = ('question__number',)
 
 admin.site.unregister(User)
 admin.site.register(Question, QuestionAdmin)
-admin.site.register(Answer)
+admin.site.register(Answer, AnswerAdmin)
 admin.site.register(User, UserAdmin)

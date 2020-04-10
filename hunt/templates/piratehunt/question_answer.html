@@ -2,7 +2,7 @@
 
 {% block content %}
 
-  <h1>{{ question }}?</h1>
+  <h1>{{ question }}</h1>
   <form method="post">
     {% csrf_token %}
     {% for field in form %}
