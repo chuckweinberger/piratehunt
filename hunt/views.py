@@ -9,6 +9,9 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Max
+from django.core.mail import send_mail
+from django.conf import settings
+import ast
 
 from .models import Question, Profile, Answer
 from .forms import SignUpForm, AnswerForm
@@ -72,6 +75,7 @@ def QuestionDetail(request, question_number):
     else:
         
         current_question = Question.objects.get(number = 1)
+        #because the user got this question right, set this attribute well in the past so that the user can go immediatly to the next question
         user.profile.last_wrong_answer_made_on = now() - timedelta(hours=3)
         
     #Make sure this team is accessing the correct question
@@ -96,6 +100,17 @@ def QuestionDetail(request, question_number):
                     user.profile.questions_answered.add(current_question)
                     user.save()
                     
+                    #test to see if the quiz runners should be nofified that a team answered this question correctly
+                    if current_question.answered_for_the_first_time():
+                        subject = 'NOTICE: Question #{} Answered for the First Time'.format(current_question.number)
+                        message = 'Team {} was the first to answer question #{} correctly'.format(user.username, current_question.number)
+                        s = settings.GAME_RUNNERS
+                        
+                        #turn the string that looks like "['recepient1@lkj.com', 'recepient2@lksjdf.com']"into a list of the two substrings
+                        recepients = ast.literal_eval(s) 
+                        
+                        #sent the email notificaiton
+                        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, recepients, fail_silently = False)
                     #update the question instance
                     current_question.times_solved = current_question.times_solved + 1
                     current_question.save()

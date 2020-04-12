@@ -56,6 +56,6 @@ class SignUpForm(UserCreationForm):
                                     help_text='You can have up to 4 Team Members',
                                     widget=forms.TextInput(attrs={'class':'form-control'})
                                    )
-
+    
 class AnswerForm(forms.Form):
     answer = forms.CharField(label="What\'s your guess?", max_length=400, widget=forms.TextInput(attrs={'class':'form-control'}))

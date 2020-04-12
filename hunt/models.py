@@ -20,6 +20,9 @@ class Question(models.Model):
     def __str__(self):
         return self.question_text
     
+    def answered_for_the_first_time(self):
+        return self.times_solved == 0
+        
     def first_to_solve(self):
         try:
             return self.answer_set.filter(right="True").first().user.username
@@ -52,9 +55,7 @@ class Answer(models.Model):
       try:
           return self.question.number
       except:
-          return
-        
-    
+          return        
         
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
